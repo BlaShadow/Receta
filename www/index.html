@@ -20,7 +20,6 @@
     </head>
     <body class="row">
         <div class="app" class="col-md-10">
-            <h1>Recetas</h1>
             <!-- Aquí va el código -->
             
             <div role="tabpanel">
@@ -32,9 +31,62 @@
                 <li role="presentation"><a href="#chefs" aria-controls="chefs" role="tab" data-toggle="tab">Chefs</a></li>
               </ul>
             
-              <!-- Tab panes -->
+              <!-- Tab panes -->			  
               <div class="tab-content">
-                <div role="tabpanel" class="tab-pane active" id="recetas" style="padding:10px">
+			  <div role="tabpanel" class="tab-pane active" id="home" style="padding:10px">
+				<div class="col-md-8">
+					<h3>Recetas</h3>
+					<table class="table table-hover">
+					  <thead>
+						  <tr>
+							  <th>Code</th>
+							  <th>Nombre</th>
+						  </tr>
+					  </thead>
+					  <tbody>
+						  <tr>
+							  <td>Code</td>
+							  <td>Nombre</td>
+						  </tr>
+						  <tr>
+							<td>Code</td>
+							  <td>Nombre</td>
+						  </tr>
+						  <tr>
+							<td>Code</td>
+							  <td>Nombre</td>
+						  </tr>
+					  </tbody>
+					</table>
+                </div>
+				<div class="col-md-8">
+					<h3>Chefs</h3>
+					<table class="table table-hover">
+					  <thead>
+						  <tr>
+							  <th>Code</th>
+							  <th>Nombre</th>
+						  </tr>
+					  </thead>
+					  <tbody>
+						  <tr>
+							  <td>Code</td>
+							  <td>Nombre</td>
+						  </tr>
+						  <tr>
+							<td>Code</td>
+							  <td>Nombre</td>
+						  </tr>
+						  <tr>
+							<td>Code</td>
+							  <td>Nombre</td>
+						  </tr>
+					  </tbody>
+					</table>
+				</div>
+			  </div>
+			  
+                <div role="tabpanel" class="tab-pane" id="recetas" style="padding:10px">
                     <div class="col-md-8">
                         <form class="form-horizontal">
                             <div class="form-group">
@@ -72,7 +124,6 @@
                     </div>
                 </div>
                 
-                <div role="tabpanel" class="tab-pane" id="home">Home</div>
                 <div role="tabpanel" class="tab-pane" id="chefs" style="padding:10px">
                     <div class="col-md-8">
                         <form class="form-horizontal">
@@ -92,33 +143,8 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-8">
-                        <table class="table table-hover">
-                          <thead>
-                              <tr>
-                                  <th>Code</th>
-                                  <th>Nombre</th>
-                              </tr>
-                          </thead>
-                          <tbody>
-                              <tr>
-                                  <td>Code</td>
-                                  <td>Nombre</td>
-                              </tr>
-                              <tr>
-                                <td>Code</td>
-                                  <td>Nombre</td>
-                              </tr>
-                              <tr>
-                                <td>Code</td>
-                                  <td>Nombre</td>
-                              </tr>
-                          </tbody>
-                        </table>
-                    </div>
                 </div>
               </div>
-            
             </div>
 
             <!-- Aquí termina el código -->
