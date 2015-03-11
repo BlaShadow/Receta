@@ -1,26 +1,5 @@
 var Model = function(){
     var databaseName = "recetas_db";
-
-    /*  Model
-    
-        chef:{
-            id
-            nombre
-        }
-        
-        receta:{
-            nombre
-            chef_id
-            imagen
-        }
-    
-    */
-    
-    /** model **/
-    var data = {
-        chefs:[],
-        recetas:[]
-    };
     
     /** save object to database **/
     function saveData(datastorage){
@@ -89,9 +68,74 @@ var Model = function(){
     
     
     
-    /** Util **/
+        return {
+        addReceta:addReceta,
+        addChef:addChef,
+        listChef:listChef,
+    };
+};
+
+
+/*  Model
     
-    /** generate guid (unique identifier) **/
+        chef:{
+            id
+            nombre
+        }
+        
+        receta:{
+            nombre
+            chef_id
+            imagen
+        }
+    
+    */
+    
+    /** model **/
+    var data = {
+        chefs:[],
+        recetas:[]
+    };
+
+    function initializeStorage(){
+        /*Called to check localStorage at the begining*/
+        
+        
+        /*Initialize the chef array if null*/
+        if(localStorage.chef === null || localStorage.chef === undefined)
+            localStorage.chef = '[]';
+        /*Initialize the chef array if null*/
+        if(localStorage.recipe === null || localStorage.recipe === undefined)
+            localStorage.recipe = '[]';
+    }
+    
+    function saveChef(chefName){
+        var chef = {
+          'id':guid(),
+          'name': chefName.value
+        };
+        
+        var tempChef = JSON.parse(localStorage.chef);
+        tempChef.push(chef);
+        
+        localStorage.chef = JSON.stringify(tempChef);
+    }
+    
+    function loadChefList(chefTable, chefDropDown){
+        var i;
+        var count = JSON.parse(localStorage.chef).length;
+        var chefArray = JSON.parse(localStorage.chef);
+        var chefList = '';
+        var chefScroll = '';
+        for(i = 0; i < count; i++){
+            chefList += '<tr><td>' + chefArray[i].id + '</td><td>' + chefArray[i].name + '</td></tr>';
+            chefScroll += '<option value="' + chefArray[i].id +'">' + chefArray[i].name + '</option>';
+        }
+        chefTable.innerHTML = chefList;
+        chefDropDown.innerHTML = chefScroll;
+    }
+
+/** generate guid (unique identifier) **/
     function guid() {
       function s4() {
         return Math.floor((1 + Math.random()) * 0x10000)
@@ -100,14 +144,7 @@ var Model = function(){
       }
       return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
         s4() + '-' + s4() + s4() + s4();
-    }    
-    
-    return {
-        addReceta:addReceta,
-        addChef:addChef,
-        listChef:listChef
-    };
-};
+    }  
 
 
 /*
