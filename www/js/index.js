@@ -25,7 +25,7 @@
             localStorage.recipe = '[]';
     }
     
-    function saveRecipe(recipeName, imageURL,ratingDropDown,chefDropDown){
+    function saveRecipe(recipeName, imageURL,chefId,chefName,ratingValue,callback){
         if(localStorage.chef === null || localStorage.chef === undefined){
             alert('No hay chefs en la base de datos!');
             return;
@@ -38,11 +38,12 @@
         }
         
         var recipe = {
+            'id': guid(),
             'name': recipeName.value,
             'image': imageURL.value,
-            'rating': ratingDropDown[ratingDropDown.selectedIndex].value,
-            'chefId': chefDropDown[chefDropDown.selectedIndex].value,
-            'chefName': chefDropDown[chefDropDown.selectedIndex].text
+            'rating': ratingValue,
+            'chefId': chefId,
+            'chefName': chefName
         };
         
         var tempRecipe = JSON.parse(localStorage.recipe);
@@ -54,20 +55,18 @@
         recipeName.value = '';
         imageURL.value = '';
         
-        loadRecipeList(
-            document.getElementById('recipeTable')
-        );
-        
+        callback();
     }
     
-    function saveChef(chefName){
+    function saveChef(chefName,callback){
         if(chefName.value === ''){
             alert('Nombre del chef vacío!');
             return;
         }
+        
         var chef = {
           'id':guid(),
-          'name': chefName.value
+          'name': chefName
         };
         
         var tempChef = JSON.parse(localStorage.chef);
@@ -78,25 +77,24 @@
         alert('Guardando: ' + chef.name);
         
         chefName.value = '';
-        
-        loadChefList(
-            document.getElementById('chefTable'),
-            document.getElementById('chefDropDown')
-        );
+
+        callback();
     }
     
     function loadRecipeList(recipeTable){
-        var i; //counter
-        var count = JSON.parse(localStorage.recipe).length; //no. of chefs
+        
         var recipeArray = JSON.parse(localStorage.recipe); //Array of chefs
+        var count = recipeArray.length; //no. of chefs
+        
         var recipeList = '';
-        for(i = 0; i < count; i++){
+        
+        for(var i = 0; i < count; i++){
             recipeList += 
                 '<tr>'+ 
                 
-                    '<td>' + 
+                    '<td><a data-target="#recipeDetail" data-value='+ recipeArray[i].id + '>' + 
                         recipeArray[i].name + 
-                    '</td>' +
+                    '</a></td>' +
                 
                     '<td>' +
                         recipeArray[i].rating + 
@@ -111,21 +109,42 @@
                             recipeArray[i].image + 
                         '</a>' +
                     '</td>'+
+                    
+                    '<td><a data-target="#recipeDetail" data-value='+ recipeArray[i].id + '>' +
+                        "Detalle" + 
+                    '</a></td>'+
                 
                 '</tr>';
+                
+                // <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                //   Launch demo modal
+                // </button>
         }
         
         /* Adding the HTML code */
         recipeTable.innerHTML = recipeList;
     }
     
+    function getRecipe(id,callback){
+        var storage = JSON.parse(localStorage.recipe);
+        
+        
+        var result = storage.filter(function(item){
+            return (item.id == id);
+        });
+        
+        callback(result[0]);
+    }
+    
     function loadChefList(chefTable, chefDropDown){
-        var i; //counter
-        var count = JSON.parse(localStorage.chef).length; //no. of chefs
+        
         var chefArray = JSON.parse(localStorage.chef); //Array of chefs
+        var count = chefArray.length; //no. of chefs
+        
         var chefList = '';
         var chefScroll = '';
-        for(i = 0; i < count; i++){
+        
+        for(var i = 0; i < count; i++){
             chefList += '<tr><td>' + chefArray[i].id + '</td><td>' + chefArray[i].name + '</td></tr>';
             chefScroll += '<option value="' + chefArray[i].id +'">' + chefArray[i].name + '</option>';
         }

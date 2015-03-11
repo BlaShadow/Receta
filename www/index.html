@@ -29,6 +29,7 @@
                 <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Inicio</a></li>
                 <li role="presentation"><a href="#recetas" aria-controls="recetas" role="tab" data-toggle="tab">Recetas</a></li>
                 <li role="presentation"><a href="#chefs" aria-controls="chefs" role="tab" data-toggle="tab">Chefs</a></li>
+                <li role="presentation"><a  aria-controls="chefs" role="tab" data-toggle="tab" onclick="window.close()">Salir</a></li>
               </ul>
             
               <!-- Tab panes -->			  
@@ -63,6 +64,7 @@
 					  </tbody>
 					</table>
 				</div>
+				
 			  </div>
 			  
                 <div role="tabpanel" class="tab-pane" id="recetas" style="padding:10px">
@@ -78,7 +80,7 @@
               	            <div class="form-group">
               	                <label class="col-sm-2 col-md-6 control-label">Url de imagen:</label>
               	                <div class="col-sm-10 col-md-6">
-              	                    <input type="text" name="imageURL" id='imageURL' placeholder="Url" class="form-control">
+              	                    <input type="url" name="imageURL" id='imageURL' placeholder="Url" class="form-control">
               	                </div>
               	            </div>
               	            
@@ -107,7 +109,7 @@
               	
               	            
               	            <div class="form-action">
-                                <button type="button" id="btnSaveReceta" class="btn btn-primary" onclick="saveRecipe(recipeName, imageURL,ratingDropDown,chefDropDown)">Aceptar</button>  
+                                <button type="button" id="btnSaveReceta" class="btn btn-primary" onclick="viewSaveRecipe(recipeName, imageURL,ratingDropDown,chefDropDown)">Aceptar</button>  
                                 <button type="reset" class="btn btn-danger">Cancelar</button>
                             </div>
                         </form>
@@ -128,11 +130,45 @@
               	
               	            
               	            <div class="form-action">
-                                <button type="button" id="btnSaveChef" class="btn btn-primary" onclick='saveChef(chefName)'>Aceptar</button>  
+                                <button type="button" id="btnSaveChef" class="btn btn-primary" onclick='viewSaveChef(chefName)'>Aceptar</button>  
                                 <button type="reset" class="btn btn-danger" onclick="chefName.value='';">Cancelar</button>
                             </div>
                         </form>
                     </div>
+                </div>
+              </div>
+            </div>
+            
+
+            <!-- Modal -->
+            <div class="modal fade" id="recipeDetail" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">Detalles receta</h4>
+                  </div>
+                  <div class="modal-body">
+                  
+                      <div >
+                        <h4>Nombre</h4>
+                        <p id='modalNameRecipe'></p>
+                      </div>
+                        
+                      <div >
+                        <h4>Nombre Chef</h4>
+                        <p id='modalRecipeChefName'></p>
+                      </div>
+                      
+                      <div >
+                        <h4>Imagen</h4>
+                        <p id='modalRecipePicture'></p>
+                      </div>
+                    
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -143,5 +179,67 @@
         <script src="js/bootstrap.min.js"></script>
         <!--<script type="text/javascript" src="cordova.js"></script>-->
         <script type="text/javascript" src="js/index.js"></script>
+        
+        
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $(document).on('click',"a[data-target='#recipeDetail']",function(){
+                    console.log( $(this).atrr );
+                    
+                    var idRecipe = this.getAttribute('data-value');
+                    
+                    bindModal(idRecipe)
+                });
+            });
+            
+            function bindModal(idRecipe){
+                
+                getRecipe(idRecipe,function(item){
+                    console.log(item);
+                    
+                //   'id'
+                //     'name'
+                //     'image'
+                //     'rating'
+                //     'chefId'
+                //     'chefName'
+                
+                    $('#modalNameRecipe').text(item.name);
+                    $('#modalRecipeChefName').text(item.chefName);
+                    $('#modalRecipePicture').html("<img style='width:300px' src='"+ item.image +"'>");
+                })
+                
+                $('#recipeDetail').modal('show');
+            }
+            
+            function viewSaveRecipe(recipeName, imageURL,ratingDropDown,chefDropDown){
+                
+                var rating = ratingDropDown[ratingDropDown.selectedIndex].value;
+                var chefId = chefDropDown[chefDropDown.selectedIndex].value;
+                var chefname = chefDropDown[chefDropDown.selectedIndex].text;
+    
+                saveRecipe(recipeName,imageURL,chefId,chefname,rating,function(){
+                    
+                    loadRecipeList(
+                        document.getElementById('recipeTable')
+                    );
+                
+                    $('a[href="#home"]').tab('show');
+                });
+            }
+            
+            function viewSaveChef(chef){
+                saveChef(chef.value,function(){
+                            
+                    loadChefList(
+                        document.getElementById('chefTable'),
+                        document.getElementById('chefDropDown')
+                    );
+            
+                    $('a[href="#home"]').tab('show');
+                });
+            }
+            
+        </script>
     </body>
 </html>
